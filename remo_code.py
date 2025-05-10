@@ -5,6 +5,8 @@ import numpy as np
 import tensorflow as tf
 import nltk
 from nltk.stem import WordNetLemmatizer
+nltk.download('punkt_tab')
+nltk.download('wordnet')
 
 # This reduces words from their base form to their root form
 lemmatizer= WordNetLemmatizer()
@@ -52,9 +54,9 @@ for doc in documents:
     training.append([bag, output_row])
 
 random.shuffle(training)
-training= np.array(training)
-train_x= training[:, :len(w)]
-train_y= training[:, len(w):]
+
+train_x = np.array([t[0] for t in training])
+train_y = np.array([t[1] for t in training])
 
 #Neural Network Model
 
@@ -66,7 +68,7 @@ model= tf.keras.Sequential()
 #If we put the dropout layer value as lower than 0.5, it may learn faster and the model retains more info, while if we put it higher than 0.5, it may learn slower and the model retains less info
 
 #Consider using different activation functions like sigmoid, tanh, softmax, etc. for different layers and different values of dropout ( This is called hyperparameter tuning)
-model.add(tf.keras.layer.Dense(128, input_shape=(len(train_x[0]),), activation='relu')) # can we use relu or sigmoid or tanh or softmax or any other activation function
+model.add(tf.keras.layers.Dense(128, input_shape=(len(train_x[0]),), activation='relu')) # can we use relu or sigmoid or tanh or softmax or any other activation function
 model.add(tf.keras.layers.Dropout(0.5))
 
 model.add(tf.keras.layers.Dense(64, activation = 'relu'))
